@@ -17,7 +17,7 @@ def index():
     return {"Check": "Docs Page"}
 
 @app.get("/addresses/")
-def read_root(db : Session = Depends(get_db)):
+def get_all(db : Session = Depends(get_db)):
     address = db.query(models.Address).all()
     return address
 
@@ -30,10 +30,17 @@ def create_address(request: schemas.Address,db : Session = Depends(get_db)):
     db.refresh(new_address)
     return new_address
 
-@app.get('/addresses/{id}', response_model=schemas.Address)
+@app.get('/addresses/{id}')
 def get_address(id: int,db : Session = Depends(get_db)):
     address = db.query(models.Address).filter(models.Address.id == id).first()
     return address
+
+@app.delete('/addresses/{id}')
+def delete_address(id: int,db : Session = Depends(get_db)):
+    address = db.query(models.Address).filter(models.Address.id == id).first()
+    db.delete(address)
+    db.commit()
+    return {"message": "Address deleted"}
 
 @app.put('/addresses/{id}', response_model=schemas.Address)
 def update_address(id: int, request: schemas.Address,db : Session = Depends(get_db)):
@@ -47,11 +54,8 @@ def update_address(id: int, request: schemas.Address,db : Session = Depends(get_
     db.commit()
     return address
 
-# retrieve the addresses that are within a given distance and location coordinates .
-@app.get('/addresses/{lat}/{lng}/{distance}', response_model=schemas.AddressDistance)
-def get_location(lat: float, lng: float, distance: int,db : Session = Depends(get_db)):
-    address = db.query(models.Address).filter(models.Address.lat.between(lat-distance,lat+distance)).filter(models.Address.lng.between(lng-distance,lng+distance)).all()
+# retrieve all the addresses that are between the coordinates 
+@app.get('/addresses/{lat}/{lng}')
+def get_address_by_coordinates(lat: float, lng: float,db : Session = Depends(get_db)):
+    address = db.query(models.Address).filter(models.Address.lat <= lat, models.Address.lng <= lng).all()
     return address
-
-
-

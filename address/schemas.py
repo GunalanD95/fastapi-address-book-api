@@ -13,10 +13,10 @@ class Address(BaseModel):
     class Config():
         orm_mode = True
 
-class AddressDistance(BaseModel):
-    distance: int
+
+class ShowAddress(BaseModel):
     lat: float
     lng: float
 
     class Config():
-        orm_mode = True  
+        orm_mode = True
