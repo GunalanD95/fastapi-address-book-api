@@ -59,3 +59,10 @@ def update_address(id: int, request: schemas.Address,db : Session = Depends(get_
 def get_address_by_coordinates(lat: float, lng: float,db : Session = Depends(get_db)):
     address = db.query(models.Address).filter(models.Address.lat <= lat, models.Address.lng <= lng).all()
     return address
+
+
+
+@app.get('/addresses/{lat}/{lng}/{radius}')
+def get_address_by_coordinates(lat: float, lng: float, radius: float,db : Session = Depends(get_db)):
+    address = db.query(models.Address).filter(models.Address.lat <= lat, models.Address.lng <= lng, models.Address.lat >= lat - radius, models.Address.lng >= lng - radius).all()
+    return address
