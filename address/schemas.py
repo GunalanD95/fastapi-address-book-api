@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from .db import Base
 
 
 class Address(BaseModel):
@@ -8,3 +9,14 @@ class Address(BaseModel):
     zip: str
     lat: float
     lng: float
+
+    class Config():
+        orm_mode = True
+
+class AddressDistance(BaseModel):
+    distance: int
+    lat: float
+    lng: float
+
+    class Config():
+        orm_mode = True  
