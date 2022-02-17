@@ -12,6 +12,13 @@ Also install uvicorn to work as the server:
 pip3 install uvicorn[standard]
 ```
 
+######  INSTALL ALL THE REQUIREMENTS
+
+```
+run: pip3 install -r requirements.txt in your shell.
+```
+
+
 ######  RUN THE APP
 
 ```
